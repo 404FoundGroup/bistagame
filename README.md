@@ -1,1 +1,1 @@
-# bistgame
+# bistagame
