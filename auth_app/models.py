@@ -1,4 +1,5 @@
 from django.db import models
+from enum import Enum
 
 # Create your models here.
 
@@ -30,15 +31,21 @@ class Friendship(models.Model):
     friend = models.ForeignKey(User,models.CASCADE)
     blocked = models.BooleanField(default=False)# relation is in blocked or firend state
 
-def get_deleted_user():
-    """
-        get a refrence to a deleted user
-    """
-    return User.objects.get_or_create(username='deleted user')[0]
+
+class gameOutcome(Enum):
+    ansWin, askWin, ansLeft, askLeft, draw = range(5)
+
 
 class GameLog(models.Model):
+    def get_deleted_user():
+        """
+            get a refrence to a deleted user
+        """
+        return User.objects.get_or_create(username='deleted user')[0]
+
     playerAsk = models.ForeignKey(User,models.SET(get_deleted_user),related_name='gamelog_asker_set')
     playerAsn = models.ForeignKey(User,models.SET(get_deleted_user),related_name='gamelog_answerer_set')
     log = models.TextField()
     scoreAsk = models.IntegerField()
     scoreAns = models.IntegerField()
+    outcome = models.IntegerField()
